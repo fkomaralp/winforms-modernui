@@ -93,6 +93,19 @@ namespace MetroFramework
                     int y = Convert.ToInt32(Math.Ceiling((decimal)(Screen.PrimaryScreen.WorkingArea.Size.Height / 2) - (_owner.Size.Height / 2)));
                     _owner.Location = new Point(x, y);
                 }
+                
+                // MessageBox sounds trigger moved
+                switch (icon)
+                {
+                    case MessageBoxIcon.Error:
+                        SystemSounds.Hand.Play(); break;
+                    case MessageBoxIcon.Exclamation:
+                        SystemSounds.Exclamation.Play(); break;
+                    case MessageBoxIcon.Question:
+                        SystemSounds.Beep.Play(); break;
+                    default:
+                        SystemSounds.Asterisk.Play(); break;
+                }    
 
                 MetroMessageBoxControl _control = new MetroMessageBoxControl();
                 _control.BackColor = _owner.BackColor;
@@ -124,19 +137,9 @@ namespace MetroFramework
 
                 _control.ShowDialog(); _control.BringToFront();
                 _control.SetDefaultButton();
-
-                switch (icon)
-                {
-                    case MessageBoxIcon.Error:
-                        SystemSounds.Hand.Play(); break;
-                    case MessageBoxIcon.Exclamation:
-                        SystemSounds.Exclamation.Play(); break;
-                    case MessageBoxIcon.Question:
-                        SystemSounds.Beep.Play(); break;
-                    default:
-                        SystemSounds.Asterisk.Play(); break;
-                }
-
+                
+                // Procressing error on MessageBox sounds triggers 
+                
                 Action<MetroMessageBoxControl> _delegate = new Action<MetroMessageBoxControl>(ModalState);
                 IAsyncResult _asyncresult = _delegate.BeginInvoke(_control, null, _delegate);
                 bool _cancelled = false;
